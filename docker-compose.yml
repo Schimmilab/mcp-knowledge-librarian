@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mcp-knowledge-librarian:
+    build: .
+    container_name: mcp-knowledge-librarian
+    volumes:
+      # Mount your PDF library
+      - ./sample_library:/app/library:ro
+      # Persist index
+      - ./index_data:/app/.index
+      # Config file
+      - ./config.yaml:/app/config.yaml:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  index_data:

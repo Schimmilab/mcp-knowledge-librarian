@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Index and data
+.index/
+data/
+*.db
+*.sqlite
+
+# Batch-job progress logs (scripts/reindex_ocr.py, scripts/embed_chunks.py)
+*.log
+
+# Testing
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local configuration (personal paths) — use config.example.yaml as template
+config.yaml
+
+# Claude Code / agent tooling
+.claude/
+agentdb.rvf*

@@ -1,0 +1,70 @@
+# Copy to config.yaml and adjust library_paths.
+# MCP Knowledge Librarian Configuration
+
+# Directories to scan for PDFs (can be multiple)
+library_paths:
+  - "~/Documents/ebooks"
+  - "/path/to/more/pdfs"
+
+# Index storage location — keep it OUT of cloud-synced folders (every write would trigger a sync)
+index_path: "~/.cache/knowledge-librarian/index"
+
+# Text extraction settings
+extraction:
+  # Detect if PDF needs OCR
+  detect_scans: true
+  # Perform OCR on detected scans (requires tesseract)
+  enable_ocr: false
+  # Tesseract language (e.g., "eng", "deu", "eng+deu")
+  ocr_language: "eng"
+
+# Chunking settings
+chunking:
+  # Strategy: "page" or "fixed_size"
+  strategy: "page"
+  # For fixed_size: chunk size in characters
+  chunk_size: 1000
+  # For fixed_size: overlap in characters
+  chunk_overlap: 200
+
+# Search settings
+search:
+  # Semantic search (local E5 embeddings) fused with BM25 via RRF. Falls back
+  # to pure BM25 automatically while no embeddings exist, so it's safe on.
+  # Populate embeddings with: python scripts/embed_chunks.py --index <path>
+  enable_semantic: true
+  # Local multilingual embedding model (lazy-loaded, MPS-accelerated).
+  # Requires the `semantic` extra: pip install -e ".[semantic]"
+  embedding_model: "intfloat/multilingual-e5-small"
+  # Cross-encoder reranking as a final stage (opt-in: second model + latency).
+  enable_rerank: false
+  # Reranker model (strong multilingual cross-encoder, ~2.3 GB).
+  rerank_model: "BAAI/bge-reranker-v2-m3"
+  # How many hybrid candidates the cross-encoder rescores (latency vs. recall).
+  rerank_pool: 25
+  keyword_weight: 1.0
+  # Maximum results to return
+  max_results: 20
+  # Minimum relevance score (0.0-1.0)
+  min_score: 0.1
+
+# Snippet settings
+snippet:
+  # Context characters before and after match
+  context_chars: 150
+  # Maximum snippet length
+  max_length: 500
+
+# Background indexing
+background_indexing:
+  # Indexing does not run inside the MCP process by default.
+  # Re-index explicitly via the index_documents tool or scripts/index_library.py
+  enabled: false
+  scan_interval: 3600
+  batch_size: 50
+  index_on_startup: false
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
