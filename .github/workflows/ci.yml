@@ -1,0 +1,28 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --extra dev
+      - run: uv run pytest
+
+      # Smoke-Test: startet den Server wirklich und spricht das MCP-Protokoll
+      # (initialize -> tools/list). Die Beispiel-Config reicht: Indexierung laeuft
+      # nicht beim Start, der Index wird leer angelegt.
+      - name: Config aus Vorlage
+        run: cp config.example.yaml config.yaml
+      - name: MCP-Smoke
+        uses: Schimmilab/mcp-smoke-action@v1
+        with:
+          command: uv run python -m mcp_knowledge_librarian.server config.yaml
+          min-tools: "9"
